@@ -26,5 +26,15 @@ int Emulate8080Op(State8080 *state) {
 		state->c = opcode[1];
 		state->pc++;
 		break;
+	case 0x41:
+		state->b = state->c;
+		break;
+	case 0x42:
+		state->b = state->d;
+		break;
+	case 0x43:
+		state->b = state->e;
+		break;
 	}
+	state->pc+=1;
 }
