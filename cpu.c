@@ -2,6 +2,17 @@
 #include <stdio.h>
 #include <stdint.h>
 
+int Parity(uint8_t value) {
+	int count = 0;
+	for (int i = 0; i < 8; i++) {
+		if (value & (1 << i)) {
+			count++;
+		}
+	}
+
+	return (count % 2) == 0;
+}
+
 void UnimplementedInstruction(State8080 *state) {
 	printf("Error: Unimplemented instruction\n");
 	exit(1);
@@ -19,13 +30,13 @@ int Emulate8080Op(State8080 *state) {
 		state->pc += 2;
 		break;
 	case 0x04:
-		state->b++;
-		if (state->b == 0) {
-			state->cc.z = 1;
-		}
-		else {
-			state->cc.z = 0;
-		}
+		uint8_t answer = state->b + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->b & 0x0F) == 0x0F);
+			state->b = answer;
+			break;
 	case 0x06:
 		state->b = opcode[1];
 		state->pc++;
