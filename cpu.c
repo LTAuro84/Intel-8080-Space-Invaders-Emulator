@@ -37,14 +37,50 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->b & 0x0F) == 0x0F);
 			state->b = answer;
 			break;
+	case 0x05:
+		uint8_t answer = state->b - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->b & 0x0F) == 0x0F);
+			state->b = answer;
+			break;
 	case 0x06:
 		state->b = opcode[1];
 		state->pc++;
 		break;
+	case 0x0c:
+		uint8_t answer = state->c + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->c & 0x0F) == 0x0F);
+			state->c = answer;
+	case 0x0d:
+		uint8_t answer = state->c - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->c & 0x0F) == 0x0F);
+			state->c = answer;
 	case 0x0e:
 		state->c = opcode[1];
 		state->pc++;
 		break;
+	case 0x14:
+		uint8_t answer = state->d + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->d & 0x0F) == 0x0F);
+			state->d = answer;
+	case 0x15:
+		uint8_t answer = state->d - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->d & 0x0F) == 0x0F);
+			state->d = answer;
 	case 0x41:
 		state->b = state->c;
 		break;
