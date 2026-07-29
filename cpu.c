@@ -29,7 +29,7 @@ int Emulate8080Op(State8080 *state) {
 		state->b = opcode[2];
 		state->pc += 2;
 		break;
-	case 0x04:
+	case 0x04: { 
 		uint8_t answer = state->b + 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -37,7 +37,8 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->b & 0x0F) == 0x0F);
 			state->b = answer;
 			break;
-	case 0x05:
+	}
+	case 0x05: { 
 		uint8_t answer = state->b - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -45,24 +46,29 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->b & 0x0F) == 0x0F);
 			state->b = answer;
 			break;
+	}
 	case 0x06:
 		state->b = opcode[1];
 		state->pc++;
 		break;
-	case 0x0c:
+	case 0x0c: { 
 		uint8_t answer = state->c + 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
 			state->cc.p = Parity(answer&0xff);
 			state->cc.ac = ((state->c & 0x0F) == 0x0F);
 			state->c = answer;
-	case 0x0d:
+			break;
+	}
+	case 0x0d: { 
 		uint8_t answer = state->c - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
 			state->cc.p = Parity(answer&0xff);
 			state->cc.ac = ((state->c & 0x0F) == 0x0F);
 			state->c = answer;
+			break;
+	}
 	case 0x0e:
 		state->c = opcode[1];
 		state->pc++;
@@ -74,6 +80,7 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.p = Parity(answer&0xff);
 			state->cc.ac = ((state->d & 0x0F) == 0x0F);
 			state->d = answer;
+			break;
 	case 0x15:
 		uint8_t answer = state->d - 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -81,6 +88,87 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.p = Parity(answer&0xff);
 			state->cc.ac = ((state->d & 0x0F) == 0x0F);
 			state->d = answer;
+			break;
+	case 0x1c:
+		uint8_t answer = state->e + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->e & 0x0F) == 0x0F);
+			state->e = answer;
+			break;
+	case 0x1d:
+		uint8_t answer = state->e - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->e & 0x0F) == 0x0F);
+			state->e = answer;
+			break;
+	case 0x24:
+		uint8_t answer = state->h + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->h & 0x0F) == 0x0F);
+			state->h = answer;
+			break;
+	case 0x25:
+		uint8_t answer = state->h - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->h & 0x0F) == 0x0F);
+			state->h = answer;
+			break;
+	case 0x2c:
+		uint8_t answer = state->l + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->l & 0x0F) == 0x0F);
+			state->l = answer;
+			break;
+	case 0x2d:
+		uint8_t answer = state->l - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->l & 0x0F) == 0x0F);
+			state->l = answer;
+			break;
+	case 0x34:
+		uint8_t answer = state->m + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->m & 0x0F) == 0x0F);
+			state->m = answer;
+			break;
+	case 0x35:
+		uint8_t answer = state->m - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->m & 0x0F) == 0x0F);
+			state->m = answer;
+			break;
+	case 0x3c:
+		uint8_t answer = state->a + 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->a & 0x0F) == 0x0F);
+			state->a = answer;
+			break;
+	case 0x3d:
+		uint8_t answer = state->a - 1;
+			state->cc.z = ((answer & 0xff) == 0);
+			state->cc.s = ((answer & 0x80) != 0);
+			state->cc.p = Parity(answer&0xff);
+			state->cc.ac = ((state->a & 0x0F) == 0x0F);
+			state->a = answer;
+			break;
 	case 0x41:
 		state->b = state->c;
 		break;
