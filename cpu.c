@@ -100,7 +100,7 @@ int Emulate8080Op(State8080 *state) {
 			state->e = answer;
 			break;
 	}
-	case 0x1d:
+	case 0x1d: {
 		uint8_t answer = state->e - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -108,7 +108,8 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->e & 0x0F) == 0x0F);
 			state->e = answer;
 			break;
-	case 0x24:
+	}
+	case 0x24: {
 		uint8_t answer = state->h + 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -116,7 +117,8 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->h & 0x0F) == 0x0F);
 			state->h = answer;
 			break;
-	case 0x25:
+	}
+	case 0x25: {
 		uint8_t answer = state->h - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -124,7 +126,8 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->h & 0x0F) == 0x0F);
 			state->h = answer;
 			break;
-	case 0x2c:
+	}
+	case 0x2c: { 
 		uint8_t answer = state->l + 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -132,7 +135,8 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->l & 0x0F) == 0x0F);
 			state->l = answer;
 			break;
-	case 0x2d:
+	}
+	case 0x2d: { 
 		uint8_t answer = state->l - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -140,6 +144,7 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->l & 0x0F) == 0x0F);
 			state->l = answer;
 			break;
+	}
 	case 0x34: {
 		uint16_t offset = hl_address(state);
 		uint8_t answer = state->memory[offset] + 1;
@@ -160,7 +165,7 @@ int Emulate8080Op(State8080 *state) {
 			state->memory[offset] = answer;
 			break;
 	}
-	case 0x3c:
+	case 0x3c: { 
 		uint8_t answer = state->a + 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -168,7 +173,8 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->a & 0x0F) == 0x0F);
 			state->a = answer;
 			break;
-	case 0x3d:
+	}
+	case 0x3d: {
 		uint8_t answer = state->a - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -176,6 +182,7 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->a & 0x0F) == 0x0F);
 			state->a = answer;
 			break;
+	}
 	case 0x41:
 		state->b = state->c;
 		break;
