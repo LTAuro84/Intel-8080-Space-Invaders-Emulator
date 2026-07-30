@@ -82,7 +82,7 @@ int Emulate8080Op(State8080 *state) {
 			state->d = answer;
 			break;
 	}
-	case 0x15:
+	case 0x15: { 
 		uint8_t answer = state->d - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
@@ -90,6 +90,7 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->d & 0x0F) == 0x0F);
 			state->d = answer;
 			break;
+	}
 	case 0x1c:
 		uint8_t answer = state->e + 1;
 			state->cc.z = ((answer & 0xff) == 0);
