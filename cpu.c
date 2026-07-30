@@ -140,22 +140,26 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->l & 0x0F) == 0x0F);
 			state->l = answer;
 			break;
-	case 0x34:
-		uint8_t answer = state->m + 1;
+	case 0x34: {
+		uint16_t offset = hl_address(state);
+		uint8_t answer = state->memory[offset] + 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
 			state->cc.p = Parity(answer&0xff);
-			state->cc.ac = ((state->m & 0x0F) == 0x0F);
-			state->m = answer;
+			state->cc.ac = ((state->memory[offset] & 0x0F) == 0x0F);
+			state->memory[offset] = answer;
 			break;
-	case 0x35:
-		uint8_t answer = state->m - 1;
+	}
+	case 0x35: {
+		uint16_t offset = hl_address(state);
+		uint8_t answer = state->memory[offset] - 1;
 			state->cc.z = ((answer & 0xff) == 0);
 			state->cc.s = ((answer & 0x80) != 0);
 			state->cc.p = Parity(answer&0xff);
-			state->cc.ac = ((state->m & 0x0F) == 0x0F);
-			state->m = answer;
+			state->cc.ac = ((state->memory[offset] & 0x0F) == 0x0F);
+			state->memory[offset] = answer;
 			break;
+	}
 	case 0x3c:
 		uint8_t answer = state->a + 1;
 			state->cc.z = ((answer & 0xff) == 0);
