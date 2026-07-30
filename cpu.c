@@ -13,6 +13,20 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void DAD (State8080 *state, uint32_t value) {
+	uint32_t hl = (state->h << 8) | state->l;
+	uint32_t answer = hl + value;
+
+	state->cc.cy = ((answer & 0xffff0000) > 0);
+
+	state->h = (answer & 0xff00) >> 8;
+	state->l = (answer & 0xff);
+}
+
+uint16_t hl_address(State8080 *state) {
+	return (state->h << 8) | state->l;
+}
+
 void UnimplementedInstruction(State8080 *state) {
 	printf("Error: Unimplemented instruction\n");
 	exit(1);
@@ -51,6 +65,11 @@ int Emulate8080Op(State8080 *state) {
 		state->b = opcode[1];
 		state->pc++;
 		break;
+	case 0x09: { 
+		uint32_t bc = (state->b << 8) | (state->c);
+		DAD(state, bc);
+		break;
+	}
 	case 0x0c: { 
 		uint8_t answer = state->c + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -194,4 +213,5 @@ int Emulate8080Op(State8080 *state) {
 		break;
 	}
 	state->pc+=1;
+	return 4;
 }
