@@ -110,6 +110,11 @@ int Emulate8080Op(State8080 *state) {
 			state->d = answer;
 			break;
 	}
+	case 0x19: {
+		uint32_t de = (state->d << 8) | (state->e);
+		DAD(state, de);
+		break;
+	}
 	case 0x1c: { 
 		uint8_t answer = state->e + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -145,6 +150,11 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->h & 0x0F) == 0x0F);
 			state->h = answer;
 			break;
+	}
+	case 0x29: {
+		uint32_t hl = (state->h << 8) | (state->l);
+		DAD(state, hl);
+		break;
 	}
 	case 0x2c: { 
 		uint8_t answer = state->l + 1;
@@ -183,6 +193,11 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->memory[offset] & 0x0F) == 0x0F);
 			state->memory[offset] = answer;
 			break;
+	}
+	case 0x39: {
+		uint32_t sp = state->sp;
+		DAD(state, sp);
+		break;
 	}
 	case 0x3c: { 
 		uint8_t answer = state->a + 1;
