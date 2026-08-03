@@ -19,12 +19,12 @@ void ADD (State8080 *state, uint8_t value) {
 	state->cc.z = ((answer & 0xff) == 0);
 	state->cc.s = ((answer & 0x80) != 0);
 	state->cc.p = Parity(answer & 0xff);
-	state->cc.ac = ((state->a & 0x0F) == 0x0F);
+	state->cc.ac = (((state->a & 0x0F) + (value & 0x0F)) > 0x0F);
 	state->cc.cy = (answer > 0xff);
 	state->a = (uint8_t)(answer & 0xff);
 }
 
-void DAD (State8080 *state, uint32_t value) {
+void DAD (State8080 *state, uint16_t value) {
 	uint32_t hl = (state->h << 8) | state->l;
 	uint32_t answer = hl + value;
 
@@ -263,6 +263,7 @@ int Emulate8080Op(State8080 *state) {
 	case 0x87:
 		ADD(state, state->a);
 		break;
+	}
 	state->pc+=1;
 	return 4;
 	
