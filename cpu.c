@@ -13,6 +13,17 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void ADC (State8080 *state, uint8_t value) {
+	uint16_t answer = state->a + value + state->cc.cy;
+
+	state->cc.z = ((answer & 0xff) == 0);
+	state->cc.s = ((answer & 0x80) != 0);
+	state->cc.p = Parity(answer & 0xff);
+	state->cc.ac = (((state->a & 0x0F) + (value & 0x0F) + state->cc.cy) > 0x0F);
+	state->cc.cy = (answer > 0xff);
+	state->a = (uint8_t)(answer & 0xff);
+}
+
 void ADD (State8080 *state, uint8_t value) {
 	uint16_t answer = state->a + value;
 
@@ -263,7 +274,32 @@ int Emulate8080Op(State8080 *state) {
 	case 0x87:
 		ADD(state, state->a);
 		break;
+	case 0x88:
+		ADC(state, state->b);
+		break;
+	case 0x89:
+		ADC(state, state->c);
+		break;
+	case 0x8a:
+		ADC(state, state->d);
+		break;
+	case 0x8b:
+		ADC(state, state->e);
+		break;
+	case 0x8c:
+		ADC(state, state->h);
+		break;
+	case 0x8d:
+		ADC(state, state->l);
+		break;
+	case 0x8e: {
+		uint16_t offset = hl_address(state);
+		ADC(state, state->memory[offset]);
+		break;
 	}
+	case 0x8f:
+		ADC(state, state->a);
+		break;
 	state->pc+=1;
 	return 4;
 	
