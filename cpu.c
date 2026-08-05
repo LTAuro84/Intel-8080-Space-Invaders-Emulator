@@ -35,6 +35,17 @@ void ADD (State8080 *state, uint8_t value) {
 	state->a = (uint8_t)(answer & 0xff);
 }
 
+void SUB (State8080 *state, uint8_t value) {
+	uint16_t answer = state->a - value;
+
+	state->cc.z = ((answer & 0xff) == 0);
+	state->cc.s = ((answer & 0x80) != 0);
+	state->cc.p = Parity(answer & 0xff);
+	state->cc.ac = (((state->a & 0x0F) < (value & 0x0F)));
+	state->cc.cy = (answer > 0xff);
+	state->a = (uint8_t)(answer & 0xff);
+}
+
 void DAD (State8080 *state, uint16_t value) {
 	uint32_t hl = (state->h << 8) | state->l;
 	uint32_t answer = hl + value;
@@ -300,6 +311,34 @@ int Emulate8080Op(State8080 *state) {
 	case 0x8f:
 		ADC(state, state->a);
 		break;
+		case 0x90:
+		SUB(state, state->b);
+		break;
+	case 0x91:
+		SUB(state, state->c);
+		break;
+	case 0x92:
+		SUB(state, state->d);
+		break;
+	case 0x93:
+		SUB(state, state->e);
+		break;
+	case 0x94:
+		SUB(state, state->h);
+		break;
+	case 0x95:
+		SUB(state, state->l);
+		break;
+	case 0x96: {
+		uint16_t offset = hl_address(state);
+		SUB(state, state->memory[offset]);
+		break;
+	}
+	case 0x97:
+		SUB(state, state->a);
+		break;
+
+	}
 	state->pc+=1;
 	return 4;
 	
