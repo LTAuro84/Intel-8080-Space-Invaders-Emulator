@@ -13,6 +13,18 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void SBB (State8080 *state, uint8_t value) {
+	uint8_t carry = state->cc.cy;
+	uint16_t answer = state->a - value - carry;
+
+	state->cc.z = ((answer & 0xff) == 0);
+	state->cc.s = ((answer & 0x80) != 0);
+	state->cc.p = Parity(answer & 0xff);
+	state->cc.ac = (((state->a & 0x0F) < (value & 0x0F) + carry));
+	state->cc.cy = (answer > 0xff);
+	state->a = (uint8_t)(answer & 0xff);
+}
+
 void ADC (State8080 *state, uint8_t value) {
 	uint16_t answer = state->a + value + state->cc.cy;
 
@@ -311,7 +323,7 @@ int Emulate8080Op(State8080 *state) {
 	case 0x8f:
 		ADC(state, state->a);
 		break;
-		case 0x90:
+	case 0x90:
 		SUB(state, state->b);
 		break;
 	case 0x91:
@@ -337,7 +349,32 @@ int Emulate8080Op(State8080 *state) {
 	case 0x97:
 		SUB(state, state->a);
 		break;
-
+	case 0x98:
+		SBB(state, state->b);
+		break;
+	case 0x99:
+		SBB(state, state->c);
+		break;
+	case 0x9a:
+		SBB(state, state->d);
+		break;
+	case 0x9b:
+		SBB(state, state->e);
+		break;
+	case 0x9c:
+		SBB(state, state->h);
+		break;
+	case 0x9d:
+		SBB(state, state->l);
+		break;
+	case 0x9e: {
+		uint16_t offset = hl_address(state);
+		SBB(state, state->memory[offset]);
+		break;
+	}
+	case 0x9f:
+		SBB(state, state->a);
+		break;
 	}
 	state->pc+=1;
 	return 4;
