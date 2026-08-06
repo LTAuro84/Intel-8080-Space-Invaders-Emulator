@@ -80,6 +80,7 @@ void UnimplementedInstruction(State8080 *state) {
 int Emulate8080Op(State8080 *state) {
 	
 	unsigned char *opcode = &state->memory[state->pc];
+	 disassemble8080op(state->memory, state->pc);
 
 	switch(*opcode) {
 	case 0x00: break; //NOP
@@ -137,6 +138,8 @@ int Emulate8080Op(State8080 *state) {
 		state->c = opcode[1];
 		state->pc++;
 		break;
+	case 0x0f:
+		
 	case 0x14: { 
 		uint8_t answer = state->d + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -376,6 +379,11 @@ int Emulate8080Op(State8080 *state) {
 		SBB(state, state->a);
 		break;
 	}
+	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
+           state->cc.s, state->cc.z);    
+       printf("\tA $%02x B $%02x C $%02x D $%02x E $%02x H $%02x L $%02x SP %04x\n",    
+           state->a, state->b, state->c, state->d,    
+           state->e, state->h, state->l, state->sp);  
 	state->pc+=1;
 	return 4;
 	
