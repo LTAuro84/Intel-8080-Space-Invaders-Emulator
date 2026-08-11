@@ -13,6 +13,12 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void RRC (State8080 *state) {
+	uint8_t bit0 = state->a & 1;
+	state->a = (state->a >> 1) | (bit0 << 7);
+	state->cc.cy = bit0;
+}
+
 void SBB (State8080 *state, uint8_t value) {
 	uint8_t carry = state->cc.cy;
 	uint16_t answer = state->a - value - carry;
@@ -139,7 +145,8 @@ int Emulate8080Op(State8080 *state) {
 		state->pc++;
 		break;
 	case 0x0f:
-		
+		RRC(state);
+		break;
 	case 0x14: { 
 		uint8_t answer = state->d + 1;
 			state->cc.z = ((answer & 0xff) == 0);
