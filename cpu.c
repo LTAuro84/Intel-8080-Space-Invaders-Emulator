@@ -198,6 +198,11 @@ int Emulate8080Op(State8080 *state) {
 		DAD(state, de);
 		break;
 	}
+	case 0x1a: {
+		uint16_t address = (state->d << 8) | (state->e);
+		state->a = state->memory[address];
+		break;
+	}
 	case 0x1c: { 
 		uint8_t answer = state->e + 1;
 			state->cc.z = ((answer & 0xff) == 0);
