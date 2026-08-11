@@ -147,6 +147,12 @@ int Emulate8080Op(State8080 *state) {
 	case 0x0f:
 		RRC(state);
 		break;
+	case 0x11: {
+		state->e = opcode[1];
+		state->d = opcode[2];
+		state->pc += 2;
+		break;
+	}
 	case 0x14: { 
 		uint8_t answer = state->d + 1;
 			state->cc.z = ((answer & 0xff) == 0);
