@@ -95,6 +95,8 @@ int Emulate8080Op(State8080 *state) {
 		state->b = opcode[2];
 		state->pc += 2;
 		break;
+	case 0x02: UnimplementedInstruction(state); break;
+	case 0x03: UnimplementedInstruction(state); break;
 	case 0x04: { 
 		uint8_t answer = state->b + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -117,11 +119,15 @@ int Emulate8080Op(State8080 *state) {
 		state->b = opcode[1];
 		state->pc++;
 		break;
+	case 0x07: UninplementedInstruction(state); break;
+	case 0x08: UnimplementedInstruction(state); break;
 	case 0x09: { 
 		uint32_t bc = (state->b << 8) | (state->c);
 		DAD(state, bc);
 		break;
 	}
+	case 0x0a: UnimplementedInstruction(state); break;
+	case 0x0b: UnimplementedInstruction(state); break;
 	case 0x0c: { 
 		uint8_t answer = state->c + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -147,11 +153,16 @@ int Emulate8080Op(State8080 *state) {
 	case 0x0f:
 		RRC(state);
 		break;
+	case 0x10: UnimplementedInstruction(state); break;
 	case 0x11: {
 		state->e = opcode[1];
 		state->d = opcode[2];
 		state->pc += 2;
 		break;
+	}
+	case 0x12: UnimplementedInstruction(state); break;
+	case 0x13: {
+
 	}
 	case 0x14: { 
 		uint8_t answer = state->d + 1;
