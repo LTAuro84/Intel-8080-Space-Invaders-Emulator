@@ -13,6 +13,13 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void INX (uint8_t* high, uint8_t* low) {
+	uint16_t value = (*high << 8) | *low;
+	value++;
+	*high = (value >> 8) & 0xff;
+	*low = value & 0xff;
+}
+
 void RRC (State8080 *state) {
 	uint8_t bit0 = state->a & 1;
 	state->a = (state->a >> 1) | (bit0 << 7);
@@ -162,7 +169,8 @@ int Emulate8080Op(State8080 *state) {
 	}
 	case 0x12: UnimplementedInstruction(state); break;
 	case 0x13: {
-
+		INX(&state->d, &state->e);
+		break;
 	}
 	case 0x14: { 
 		uint8_t answer = state->d + 1;
@@ -182,6 +190,9 @@ int Emulate8080Op(State8080 *state) {
 			state->d = answer;
 			break;
 	}
+	case 0x16: UnimplementedInstruction(state); break;
+	case 0x17: UnimplementedInstruction(state); break;
+	case 0x18: UnimplementedInstruction(state); break;
 	case 0x19: {
 		uint32_t de = (state->d << 8) | (state->e);
 		DAD(state, de);
