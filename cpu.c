@@ -231,6 +231,10 @@ int Emulate8080Op(State8080 *state) {
 		state->pc += 2;
 		break;
 	}
+	case 0x23: {
+		INX(&state->h, &state->l);
+		break;
+	}
 	case 0x24: {
 		uint8_t answer = state->h + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -248,6 +252,11 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->h & 0x0F) == 0x0F);
 			state->h = answer;
 			break;
+	}
+	case 0x26: {
+		state->h = opcode[1];
+		state->pc++;
+		break;
 	}
 	case 0x29: {
 		uint32_t hl = (state->h << 8) | (state->l);
@@ -271,6 +280,11 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->l & 0x0F) == 0x0F);
 			state->l = answer;
 			break;
+	}
+	case 0x31: {
+		state->sp = (opcode[2] << 8) | opcode[1];
+		state->pc += 2;
+		break;
 	}
 	case 0x34: {
 		uint16_t offset = hl_address(state);
