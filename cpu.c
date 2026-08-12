@@ -286,6 +286,12 @@ int Emulate8080Op(State8080 *state) {
 		state->pc += 2;
 		break;
 	}
+	case 0x32: {
+		uint16_t address = (opcode[2] << 8) | opcode[1];
+		state->memory[address] = state->a;
+		state->pc += 2;
+		break;
+	}
 	case 0x34: {
 		uint16_t offset = hl_address(state);
 		uint8_t answer = state->memory[offset] + 1;
