@@ -203,6 +203,7 @@ int Emulate8080Op(State8080 *state) {
 		state->a = state->memory[address];
 		break;
 	}
+	case 0x1b: UninplementedInstruction(state); break;
 	case 0x1c: { 
 		uint8_t answer = state->e + 1;
 			state->cc.z = ((answer & 0xff) == 0);
@@ -220,6 +221,15 @@ int Emulate8080Op(State8080 *state) {
 			state->cc.ac = ((state->e & 0x0F) == 0x0F);
 			state->e = answer;
 			break;
+	}
+	case 0x1e: UnimplementedInstruction(state); break;
+	case 0x1f: UnimplementedInstruction(state); break;
+	case 0x20: UnimplementedInstruction(state); break;
+	case 0x21: {
+		state->l = opcode[1];
+		state->h = opcode[2];
+		state->pc += 2;
+		break;
 	}
 	case 0x24: {
 		uint8_t answer = state->h + 1;
