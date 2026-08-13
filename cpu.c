@@ -285,6 +285,7 @@ int Emulate8080Op(State8080 *state) {
 	}
 	case 0x2e: UnimplementedInstruction(state); break;
 	case 0x2f: UnimplementedInstruction(state); break;
+	case 0x30: UnimplementedInstruction(state); break;
 	case 0x31: {
 		state->sp = (opcode[2] << 8) | opcode[1];
 		state->pc += 2;
@@ -317,12 +318,23 @@ int Emulate8080Op(State8080 *state) {
 			state->memory[offset] = answer;
 			break;
 	}
-	case 0x36: UnimplementedInstruction(state); break;
+	case 0x36: {
+		uint16_t offset = hl_address(state);
+		state->memory[offset] = opcode[1];
+		state->pc++;
+		break;
+	}
 	case 0x37: UnimplementedInstruction(state); break;
 	case 0x38: UnimplementedInstruction(state); break;
 	case 0x39: {
 		uint32_t sp = state->sp;
 		DAD(state, sp);
+		break;
+	}
+	case 0x3a: {
+		uint16_t address = (opcode[2] << 8) | opcode[1];
+		state->a = state->memory[address];
+		state->pc += 2;
 		break;
 	}
 	case 0x3b: UnimplementedInstruction(state); break;
@@ -344,6 +356,13 @@ int Emulate8080Op(State8080 *state) {
 			state->a = answer;
 			break;
 	}
+	case 0x3e: { 
+		state->a = opcode[1];
+		state->pc++;
+		break;
+	}
+	case 0x3f: UnimplementedInstruction(state); break;
+	case 0x40: UnimplementedInstruction(state); break;
 	case 0x41:
 		state->b = state->c;
 		break;
@@ -353,6 +372,18 @@ int Emulate8080Op(State8080 *state) {
 	case 0x43:
 		state->b = state->e;
 		break;
+	case 0x44: UnimplementedInstruction(state); break;
+	case 0x45: UnimplementedInstruction(state); break;
+	case 0x46: UnimplementedInstruction(state); break;
+	case 0x47: UnimplementedInstruction(state); break;
+	case 0x48: UnimplementedInstruction(state); break;
+	case 0x49: UnimplementedInstruction(state); break;
+	case 0x4a: UnimplementedInstruction(state); break;
+	case 0x4b: UnimplementedInstruction(state); break;
+	case 0x4c: UnimplementedInstruction(state); break;
+	case 0x4d: UnimplementedInstruction(state); break;
+	case 0x4e: UnimplementedInstruction(state); break;
+	case 0x4f: UnimplementedInstruction(state); break;
 	case 0x80:
 		ADD(state, state->b);
 		break;
