@@ -395,6 +395,43 @@ int Emulate8080Op(State8080 *state) {
 		state->d = state->memory[offset];
 		break;
 	}
+	case 0x57: UnimplementedInstruction(state); break;
+	case 0x58: UnimplementedInstruction(state); break;
+	case 0x59: UnimplementedInstruction(state); break;
+	case 0x5a: UnimplementedInstruction(state); break;
+	case 0x5b: UnimplementedInstruction(state); break;
+	case 0x5c: UnimplementedInstruction(state); break;
+	case 0x5d: UnimplementedInstruction(state); break;
+	case 0x5e: {
+		uint16_t offset = (state->h << 8) | (state->l);
+		state->e = state->memory[offset];
+		break;
+	}
+	case 0x5f: UnimplementedInstruction(state); break;
+	case 0x60: UnimplementedInstruction(state); break;
+	case 0x61: UnimplementedInstruction(state); break;
+	case 0x62: UnimplementedInstruction(state); break;
+	case 0x63: UnimplementedInstruction(state); break;
+	case 0x64: UnimplementedInstruction(state); break;
+	case 0x65: UnimplementedInstruction(state); break;
+	case 0x66: {
+		uint16_t offset = (state->h << 8) | (state->l);
+		state->h = state->memory[offset];
+		break;
+	}
+	case 0x67: UnimplementedInstruction(state); break;
+	case 0x68: UnimplementedInstruction(state); break;
+	case 0x69: UnimplementedInstruction(state); break;
+	case 0x6a: UnimplementedInstruction(state); break;
+	case 0x6b: UnimplementedInstruction(state); break;
+	case 0x6c: UnimplementedInstruction(state); break;
+	case 0x6d: UnimplementedInstruction(state); break;
+	case 0x6e: UnimplementedInstruction(state); break;
+	case 0x6f: {
+		uint16_t offset = (state->h << 8) | (state->l);
+		state->l = state->memory[offset];
+		break;
+	}
 	case 0x80:
 		ADD(state, state->b);
 		break;
