@@ -13,6 +13,12 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void POP(State8080 *state, uint8_t *high, uint8_t *low) {
+	*low = state->memory[state->sp];
+	*high = state->memory[state->sp + 1];
+	state->sp += 2;
+}
+
 void INX (uint8_t* high, uint8_t* low) {
 	uint16_t value = (*high << 8) | *low;
 	value++;
@@ -619,7 +625,8 @@ int Emulate8080Op(State8080 *state) {
 	case 0xbf: UnimplementedInstruction(state); break;
 	case 0xc0: UnimplementedInstruction(state); break;
 	case 0xc1: {
-		
+		POP(state, &state->b, &state->c);
+		break;
 	}
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
