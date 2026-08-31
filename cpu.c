@@ -81,6 +81,16 @@ void DAD (State8080 *state, uint16_t value) {
 	state->l = (answer & 0xff);
 }
 
+void XRA (State8080 *state, uint8_t value) {
+	state->a ^= value;
+
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) != 0);
+	state->cc.p = Parity(state->a);
+	state->cc.ac = 0;
+	state->cc.cy = 0;
+}
+
 uint16_t hl_address(State8080 *state) {
 	return (state->h << 8) | state->l;
 }
@@ -569,6 +579,28 @@ int Emulate8080Op(State8080 *state) {
 	case 0x9f:
 		SBB(state, state->a);
 		break;
+	case 0xa0: UnimplementedInstruction(state); break;
+	case 0xa1: UnimplementedInstruction(state); break;
+	case 0xa2: UnimplementedInstruction(state); break;
+	case 0xa3: UnimplementedInstruction(state); break;
+	case 0xa4: UnimplementedInstruction(state); break;
+	case 0xa5: UnimplementedInstruction(state); break;
+	case 0xa6: UnimplementedInstruction(state); break;
+	case 0xa7: {
+		ANA(state, state->a);
+		break;
+	}
+	case 0xa8: UnimplementedInstruction(state); break;
+	case 0xa9: UnimplementedInstruction(state); break;
+	case 0xaa: UnimplementedInstruction(state); break;
+	case 0xab: UnimplementedInstruction(state); break;
+	case 0xac: UnimplementedInstruction(state); break;
+	case 0xad: UnimplementedInstruction(state); break;
+	case 0xae: UnimplementedInstruction(state); break;
+	case 0xaf: {
+		XRA(state, state->a);
+		break;
+	}
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
            state->cc.s, state->cc.z);    
