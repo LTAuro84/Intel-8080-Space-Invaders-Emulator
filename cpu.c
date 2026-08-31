@@ -601,6 +601,26 @@ int Emulate8080Op(State8080 *state) {
 		XRA(state, state->a);
 		break;
 	}
+	case 0xb0: UnimplementedInstruction(state); break;
+	case 0xb1: UnimplementedInstruction(state); break;
+	case 0xb2: UnimplementedInstruction(state); break;
+	case 0xb3: UnimplementedInstruction(state); break;
+	case 0xb4: UnimplementedInstruction(state); break;
+	case 0xb5: UnimplementedInstruction(state); break;
+	case 0xb6: UnimplementedInstruction(state); break;
+	case 0xb7: UninplementedInstruction(state); break;
+	case 0xb8: UnimplementedInstruction(state); break;
+	case 0xb9: UnimplementedInstruction(state); break;
+	case 0xba: UnimplementedInstruction(state); break;
+	case 0xbb: UnimplementedInstruction(state); break;
+	case 0xbc: UnimplementedInstruction(state); break;
+	case 0xbd: UnimplementedInstruction(state); break;
+	case 0xbe: UnimplementedInstruction(state); break;
+	case 0xbf: UnimplementedInstruction(state); break;
+	case 0xc0: UnimplementedInstruction(state); break;
+	case 0xc1: {
+		
+	}
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
            state->cc.s, state->cc.z);    
