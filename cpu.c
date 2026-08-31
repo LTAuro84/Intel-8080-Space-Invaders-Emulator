@@ -444,6 +444,27 @@ int Emulate8080Op(State8080 *state) {
 		state->memory[offset] = state->a;
 		break;
 	}
+	case 0x78: UnimplementedInstruction(state); break;
+	case 0x79: UnimplementedInstruction(state); break;
+	case 0x7a: {
+		state->a = state->d;
+		break;
+	}
+	case 0x7b: {
+		state->a = state->e;
+		break;
+	}
+	case 0x7c: {
+		state->a = state->h;
+		break;
+	}
+	case 0x7d: UninplementedInstruction(state); break;
+	case 0x7e: {
+		uint16_t offset = (state->h << 8) | (state->l);
+		state->a = state->memory[offset];
+		break;
+	}
+	case 0x7f: UnimplementedInstruction(state); break;
 	case 0x80:
 		ADD(state, state->b);
 		break;
