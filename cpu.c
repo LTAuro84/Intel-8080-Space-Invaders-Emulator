@@ -13,6 +13,16 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void JMP(State8080* state, uint16_t address) {
+	state->pc = address;
+}
+
+void JNZ(State8080* state, uint16_t address) {
+	if (!state->cc.z) {
+		state->pc = address;
+	}
+}
+
 void POP(State8080 *state, uint8_t *high, uint8_t *low) {
 	*low = state->memory[state->sp];
 	*high = state->memory[state->sp + 1];
@@ -142,6 +152,7 @@ int Emulate8080Op(State8080 *state) {
 		state->b = opcode[1];
 		state->pc++;
 		break;
+	
 	case 0x07: UninplementedInstruction(state); break;
 	case 0x08: UnimplementedInstruction(state); break;
 	case 0x09: { 
@@ -626,6 +637,14 @@ int Emulate8080Op(State8080 *state) {
 	case 0xc0: UnimplementedInstruction(state); break;
 	case 0xc1: {
 		POP(state, &state->b, &state->c);
+		break;
+	}
+	case 0xc2: {
+		JNZ(state, (opcode[2] << 8) | opcode[1]);
+		break;
+	}
+	case 0xc3: {
+		JMP(state, (opcode[2] << 8) | opcode[1]);
 		break;
 	}
 	}
