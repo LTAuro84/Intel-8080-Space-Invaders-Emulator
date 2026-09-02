@@ -13,6 +13,29 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void RET(State8080 *state) {
+	uint8_t low, high;
+	POP(state, &high, &low);
+	state->pc = (high << 8) | low;
+}
+
+void ADI(State8080 *state, uint8_t value) {
+	uint16_t answer = state->a + value;
+
+	state->cc.z = ((answer & 0xff) == 0);
+	state->cc.s = ((answer & 0x80) != 0);
+	state->cc.p = Parity(answer & 0xff);
+	state->cc.ac = (((state->a & 0x0F) + (value & 0x0F)) > 0x0F);
+	state->cc.cy = (answer > 0xff);
+	state->a = (uint8_t)(answer & 0xff);
+}
+
+void PUSH(State8080 *state, uint8_t high, uint8_t low) {
+	state->sp -= 2;
+	state->memory[state->sp] = low;
+	state->memory[state->sp + 1] = high;
+}
+
 void JMP(State8080* state, uint16_t address) {
 	state->pc = address;
 }
@@ -645,6 +668,22 @@ int Emulate8080Op(State8080 *state) {
 	}
 	case 0xc3: {
 		JMP(state, (opcode[2] << 8) | opcode[1]);
+		break;
+	}
+	case 0xc4: UnimplementedInstruction(state); break;
+	case 0xc5: {
+		PUSH(state, state->b, state->c);
+		break;
+	}
+	case 0xc6: {
+		ADI(state, opcode[1]);
+		state->pc++;
+		break;
+	}
+	case 0xc7: UnimplementedInstruction(state); break;
+	case 0xc8: UnimplementedInstruction(state); break;
+	case 0xc9: {
+		RET(state);
 		break;
 	}
 	}
