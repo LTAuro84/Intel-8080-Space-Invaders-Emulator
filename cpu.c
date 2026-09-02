@@ -686,6 +686,10 @@ int Emulate8080Op(State8080 *state) {
 		RET(state);
 		break;
 	}
+	case 0xca: UnimplementedInstruction(state); break;
+	case 0xcb: UnimplementedInstruction(state); break;
+	case 0xcc: UnimplementedInstruction(state); break;
+	
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
            state->cc.s, state->cc.z);    
