@@ -749,8 +749,62 @@ int Emulate8080Op(State8080 *state) {
 		break;
 	}
 	case 0xe6: {
-		
+		ANI(state, opcode[1]);
+		state->pc++;
+		break;
 	}
+	case 0xe7: UnimplementedInstruction(state); break;
+	case 0xe8: UnimplementedInstruction(state); break;
+	case 0xe9: UnimplementedInstruction(state); break;
+	case 0xea: UnimplementedInstruction(state); break;
+	case 0xeb: {
+		uint8_t temp = state->d;
+		state->d = state->h;
+		state->h = temp;
+
+		temp = state->e;
+		state->e = state->l;
+		state->l = temp;
+		break;
+	}
+	case 0xec: UnimplementedInstruction(state); break;
+	case 0xed: UnimplementedInstruction(state); break;
+	case 0xee: UnimplementedInstruction(state); break;
+	case 0xef: UnimplementedInstruction(state); break;
+	case 0xf0: UnimplementedInstruction(state); break;
+	case 0xf1: {
+		POP(state, &state->a, &state->cc);
+		break;
+	}
+	case 0xf2: UnimplementedInstruction(state); break;
+	case 0xf3: UnimplementedInstruction(state); break;
+	case 0xf4: UnimplementedInstruction(state); break;
+	case 0xf5: {
+		PUSH(state, &state->a, &state->cc);
+		break;
+	}
+	case 0xf6: UnimplementedInstruction(state); break;
+	case 0xf7: UnimplementedInstruction(state); break;
+	case 0xf8: UnimplementedInstruction(state); break;
+	case 0xf9: UnimplementedInstruction(state); break;
+	case 0xfa: UnimplementedInstruction(state); break;
+	case 0xfb: {
+		state->int_enable = 1;
+		break;
+	}
+	case 0xfc: UnimplementedInstruction(state); break;
+	case 0xfd: UnimplementedInstruction(state); break;
+	case 0xfe: {
+		uint8_t x = state->a - opcode[1];
+			state->cc.z = (x == 0);
+			state->cc.s = (0x80 == (x & 0x80));
+			state->cc.p = parity(x, 8);
+			state->cc.cy = (state->a < opcode[1]);
+			state->pc++;
+
+	}
+	break;
+	case 0xff: UnimplementedInstruction(state); break;
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
            state->cc.s, state->cc.z);    
