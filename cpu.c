@@ -13,6 +13,15 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+void ANI (State8080 *state, uint8_t value) {
+	state->a &= value;
+
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) != 0);
+	state->cc.p = Parity(state->a);
+	state->cc.ac = 1;
+	state->cc.cy = 0;
+}
 
 void CALL (State8080 *state, uint16_t address) {
 	uint8_t high = (state->pc + 3) >> 8;
@@ -710,7 +719,37 @@ int Emulate8080Op(State8080 *state) {
 	}
 	case 0xd2: UnimplementedInstruction(state); break;
 	case 0xd3: {
-
+		break;
+	}
+	case 0xd4: UnimplementedInstruction(state); break;
+	case 0xd5: {
+		PUSH(state, state->d, state->e);
+		break;
+	}
+	case 0xd6: UnimplementedInstruction(state); break;
+	case 0xd7: UnimplementedInstruction(state); break;
+	case 0xd8: UnimplementedInstruction(state); break;
+	case 0xd9: UnimplementedInstruction(state); break;
+	case 0xda: UnimplementedInstruction(state); break;
+	case 0xdb: UnimplementedInstruction(state); break;
+	case 0xdc: UnimplementedInstruction(state); break;
+	case 0xdd: UnimplementedInstruction(state); break;
+	case 0xde: UnimplementedInstruction(state); break;
+	case 0xdf: UnimplementedInstruction(state); break;
+	case 0xe0: UnimplementedInstruction(state); break;
+	case 0xe1: {
+		POP(state, &state->h, &state->l);
+		break;
+	}
+	case 0xe2: UnimplementedInstruction(state); break;
+	case 0xe3: UnimplementedInstruction(state); break;
+	case 0xe4: UnimplementedInstruction(state); break;
+	case 0xe5: {
+		PUSH(state, state->h, state->l);
+		break;
+	}
+	case 0xe6: {
+		
 	}
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
