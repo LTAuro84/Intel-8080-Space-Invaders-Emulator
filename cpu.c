@@ -13,6 +13,14 @@ int Parity(uint8_t value) {
 	return (count % 2) == 0;
 }
 
+
+void CALL (State8080 *state, uint16_t address) {
+	uint8_t high = (state->pc + 3) >> 8;
+	uint8_t low = (state->pc + 3) & 0xff;
+	PUSH(state, high, low);
+	state->pc = address;
+}
+
 void RET(State8080 *state) {
 	uint8_t low, high;
 	POP(state, &high, &low);
@@ -689,7 +697,21 @@ int Emulate8080Op(State8080 *state) {
 	case 0xca: UnimplementedInstruction(state); break;
 	case 0xcb: UnimplementedInstruction(state); break;
 	case 0xcc: UnimplementedInstruction(state); break;
-	
+	case 0xcd: {
+		CALL(state, (opcode[2] << 8) | opcode[1]);
+		break;
+	}
+	case 0xce: UnimplementedInstruction(state); break;
+	case 0xcf: UnimplementedInstruction(state); break;
+	case 0xd0: UnimplementedInstruction(state); break;
+	case 0xd1: {
+		POP(state, &state->d, &state->e);
+		break;
+	}
+	case 0xd2: UnimplementedInstruction(state); break;
+	case 0xd3: {
+
+	}
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
            state->cc.s, state->cc.z);    
