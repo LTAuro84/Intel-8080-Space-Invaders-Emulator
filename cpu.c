@@ -2,6 +2,20 @@
 #include <stdio.h>
 #include <stdint.h>
 
+
+void PackFlags(State8080 *state) {
+	uint8_t flags = 0x02;
+
+	flags |= (state->cc.s << 7);
+	flags |= (state->cc.z << 6);
+	flags |= (state->cc.ac << 4);
+	flags |= (state->cc.p << 2);
+	flags |= (state->cc.cy);
+
+	return flags;
+
+}
+
 int Parity(uint8_t value) {
 	int count = 0;
 	for (int i = 0; i < 8; i++) {
