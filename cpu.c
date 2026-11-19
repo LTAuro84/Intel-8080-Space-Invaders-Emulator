@@ -170,6 +170,7 @@ void XRA (State8080 *state, uint8_t value) {
 	state->cc.cy = 0;
 }
 
+
 uint16_t hl_address(State8080 *state) {
 	return (state->h << 8) | state->l;
 }
@@ -667,7 +668,7 @@ int Emulate8080Op(State8080 *state) {
 	case 0xa5: UnimplementedInstruction(state); break;
 	case 0xa6: UnimplementedInstruction(state); break;
 	case 0xa7: {
-		ANA(state, state->a);
+		ANI(state, state->a);
 		break;
 	}
 	case 0xa8: UnimplementedInstruction(state); break;
@@ -830,15 +831,16 @@ int Emulate8080Op(State8080 *state) {
 	case 0xfc: UnimplementedInstruction(state); break;
 	case 0xfd: UnimplementedInstruction(state); break;
 	case 0xfe: {
-		uint8_t x = state->a - opcode[1];
+		uint8_t value = opcode[1];
+		uint8_t x = state->a - value;
 			state->cc.z = (x == 0);
-			state->cc.s = (0x80 == (x & 0x80));
-			state->cc.p = parity(x, 8);
-			state->cc.cy = (state->a < opcode[1]);
+			state->cc.s = ((x & 0x80) != 0);
+			state->cc.p = Parity(x);
+			state->cc.cy = (state->a < value);
+			state->cc.ac = ((state->a & 0x0F) < (value & 0x0F));
 			state->pc++;
-
+		break;
 	}
-	break;
 	case 0xff: UnimplementedInstruction(state); break;
 	}
 	  printf("\tC=%d,P=%d,S=%d,Z=%d\n", state->cc.cy, state->cc.p,    
