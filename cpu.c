@@ -16,6 +16,15 @@ void PackFlags(State8080 *state) {
 
 }
 
+void UnpackFlags(State8080 *state, uint8_t flags) {
+	state->cc.s = (flags >> 7) & 1;
+	state->cc.z = (flags >> 6) & 1;
+	state->cc.ac = (flags >> 4) & 1;
+	state->cc.p = (flags >> 2) & 1;
+	state->cc.cy = flags & 1;
+
+}
+
 int Parity(uint8_t value) {
 	int count = 0;
 	for (int i = 0; i < 8; i++) {
