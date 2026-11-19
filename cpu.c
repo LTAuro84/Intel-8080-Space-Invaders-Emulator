@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 
-void PackFlags(State8080 *state) {
+uint8_t PackFlags(State8080 *state) {
 	uint8_t flags = 0x02;
 
 	flags |= (state->cc.s << 7);
@@ -699,7 +699,9 @@ int Emulate8080Op(State8080 *state) {
 	case 0xbf: UnimplementedInstruction(state); break;
 	case 0xc0: UnimplementedInstruction(state); break;
 	case 0xc1: {
+		uint8_t flags;
 		POP(state, &state->b, &state->c);
+		UnpackFlags(state, flags);
 		break;
 	}
 	case 0xc2: {
@@ -712,6 +714,7 @@ int Emulate8080Op(State8080 *state) {
 	}
 	case 0xc4: UnimplementedInstruction(state); break;
 	case 0xc5: {
+		uint8_t flags = PackFlags(state);
 		PUSH(state, state->b, state->c);
 		break;
 	}
@@ -737,6 +740,8 @@ int Emulate8080Op(State8080 *state) {
 	case 0xcf: UnimplementedInstruction(state); break;
 	case 0xd0: UnimplementedInstruction(state); break;
 	case 0xd1: {
+		uint8_t flags;
+		UnpackFlags(state, flags);
 		POP(state, &state->d, &state->e);
 		break;
 	}
@@ -746,6 +751,7 @@ int Emulate8080Op(State8080 *state) {
 	}
 	case 0xd4: UnimplementedInstruction(state); break;
 	case 0xd5: {
+		uint8_t flags = PackFlags(state);
 		PUSH(state, state->d, state->e);
 		break;
 	}
@@ -761,6 +767,8 @@ int Emulate8080Op(State8080 *state) {
 	case 0xdf: UnimplementedInstruction(state); break;
 	case 0xe0: UnimplementedInstruction(state); break;
 	case 0xe1: {
+		uint8_t flags;
+		UnpackFlags(state, flags);
 		POP(state, &state->h, &state->l);
 		break;
 	}
@@ -768,6 +776,7 @@ int Emulate8080Op(State8080 *state) {
 	case 0xe3: UnimplementedInstruction(state); break;
 	case 0xe4: UnimplementedInstruction(state); break;
 	case 0xe5: {
+		uint8_t flags = PackFlags(state);
 		PUSH(state, state->h, state->l);
 		break;
 	}
@@ -796,6 +805,8 @@ int Emulate8080Op(State8080 *state) {
 	case 0xef: UnimplementedInstruction(state); break;
 	case 0xf0: UnimplementedInstruction(state); break;
 	case 0xf1: {
+		uint8_t flags;
+		UnpackFlags(state, flags);
 		POP(state, &state->a, &state->cc);
 		break;
 	}
@@ -803,6 +814,7 @@ int Emulate8080Op(State8080 *state) {
 	case 0xf3: UnimplementedInstruction(state); break;
 	case 0xf4: UnimplementedInstruction(state); break;
 	case 0xf5: {
+		uint8_t flags = PackFlags(state);
 		PUSH(state, &state->a, &state->cc);
 		break;
 	}
